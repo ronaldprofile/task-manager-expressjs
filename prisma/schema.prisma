@@ -7,6 +7,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  ADMIN
+  MEMBER
+}
+
 model User {
   id       String @id @default(uuid())
   name     String @db.VarChar(100)
@@ -14,14 +19,37 @@ model User {
   password String
   role     Role   @default(MEMBER)
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  teams      TeamMember[]
 
   @@index([email])
   @@map("users")
 }
 
-enum Role {
-  ADMIN
-  MEMBER
+model TeamMember {
+  id String @id @default(uuid())
+
+  team    Team   @relation(fields: [team_id], references: [id])
+  team_id String
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  created_at DateTime @default(now())
+
+  @@map("teams_members")
+}
+
+model Team {
+  id   String @id @default(uuid())
+  name String @db.VarChar(100)
+
+  description String
+
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
+  members    TeamMember[]
+
+  @@map("teams")
 }

@@ -4,7 +4,10 @@
   "main": "./src/server.ts",
   "type": "module",
   "scripts": {
-    "dev": "npx tsx watch ."
+    "dev": "npx tsx watch .",
+    "db:migrate": "npx prisma migrate dev",
+    "db:generate": "npx prisma generate",
+    "db:studio": "npx prisma studio"
   },
   "keywords": [],
   "author": "",
