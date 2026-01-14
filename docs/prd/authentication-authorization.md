@@ -334,31 +334,7 @@ JWT_EXPIRES_IN=24h
 DATABASE_URL=postgresql://user:password@localhost:5432/taskmanager
 ```
 
-### 5.3 Estrutura de Pastas do Código
-
-```
-src/
-├── auth/
-│   ├── controllers/
-│   │   ├── register.controller.ts
-│   │   └── login.controller.ts
-│   ├── middlewares/
-│   │   ├── authenticate.middleware.ts
-│   │   └── authorize.middleware.ts
-│   ├── services/
-│   │   ├── auth.service.ts
-│   │   └── jwt.service.ts
-│   ├── validators/
-│   │   ├── register.validator.ts
-│   │   └── login.validator.ts
-│   └── routes/
-│       └── auth.routes.ts
-├── types/
-│   └── express.d.ts (extensão do tipo Request)
-└── server.ts
-```
-
-### 5.4 Payload do JWT
+### 5.3 Payload do JWT
 
 ```typescript
 interface JWTPayload {
@@ -370,7 +346,7 @@ interface JWTPayload {
 }
 ```
 
-### 5.5 Extensão do Tipo Express Request
+### 5.4 Extensão do Tipo Express Request
 
 ```typescript
 // src/types/express.d.ts

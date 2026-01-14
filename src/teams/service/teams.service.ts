@@ -5,6 +5,18 @@ import type {
 } from '../validators/teams.validator.js'
 
 export class TeamService {
+  static async readTeams() {
+    const teams = await prisma.team.findMany()
+    return teams
+  }
+
+  static async findTeam(teamId: string) {
+    const team = await prisma.team.findUnique({
+      where: { id: teamId }
+    })
+    return team
+  }
+
   static async register(data: RegisterTeamInput) {
     const { name, description } = data
 
@@ -15,16 +27,6 @@ export class TeamService {
       }
     })
 
-    return team
-  }
-
-  static async findTeam(teamId: string) {
-    const team = await prisma.team.findUnique({
-      where: { id: teamId },
-      include: {
-        members: true
-      }
-    })
     return team
   }
 

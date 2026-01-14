@@ -23,6 +23,8 @@ model User {
   updated_at DateTime     @updatedAt
   teams      TeamMember[]
 
+  tasks Task[]
+
   @@index([email])
   @@map("users")
 }
@@ -51,6 +53,38 @@ model Team {
   created_at DateTime     @default(now())
   updated_at DateTime     @updatedAt
   members    TeamMember[]
+  tasks      Task[]
 
   @@map("teams")
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum TaskPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+model Task {
+  id          String       @id @default(uuid())
+  title       String       @db.VarChar(100)
+  description String?
+  status      TaskStatus   @default(PENDING)
+  priority    TaskPriority @default(MEDIUM)
+
+  assigned_to String
+  user        User   @relation(fields: [assigned_to], references: [id])
+
+  teamId String
+  team   Team   @relation(fields: [teamId], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("tasks")
 }

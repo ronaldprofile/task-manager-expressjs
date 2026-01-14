@@ -21,6 +21,8 @@ Os PRDs descrevem em detalhes as funcionalidades do sistema, incluindo:
 ### PRDs Disponíveis
 
 - [Authentication & Authorization](./prd/authentication-authorization.md)
+- [Tasks Management](./prd/tasks-management.md)
+- [Team Management](./prd/team-management.md)
 
 ## Como Contribuir
 
