@@ -1,15 +1,21 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod'
-import { registerTeamSchema } from '../validators/teams.validator.js'
 import { TeamService } from '../service/teams.service.js'
 
-export const registerTeamController = async (req: Request, res: Response) => {
+type ReqParams = { teamId: string }
+type ReqBody = { usersIds: string[] }
+
+export const addUserTeamController = async (
+  req: Request<ReqParams, any, ReqBody>,
+  res: Response
+) => {
   try {
-    const result = registerTeamSchema.parse(req.body)
+    const { teamId } = req.params
+    const { usersIds } = req.body
 
-    const team = await TeamService.register(result)
+    await TeamService.addUserToTeam(teamId, usersIds)
 
-    return res.status(201).json({ team })
+    return res.status(201).json()
   } catch (error) {
     if (error instanceof Error) {
       if (error.message) {

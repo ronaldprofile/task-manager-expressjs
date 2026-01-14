@@ -18,8 +18,18 @@ export class TeamService {
     return team
   }
 
+  static async findTeam(teamId: string) {
+    const team = await prisma.team.findUnique({
+      where: { id: teamId },
+      include: {
+        members: true
+      }
+    })
+    return team
+  }
+
   static async update(teamId: string, data: UpdateTeamInput) {
-    const existingTeam = await prisma.team.findUnique({ where: { id: teamId } })
+    const existingTeam = this.findTeam(teamId)
 
     if (!existingTeam) {
       throw new Error('Team not found')
@@ -38,5 +48,45 @@ export class TeamService {
     })
 
     return team
+  }
+
+  static async addUserToTeam(teamId: string, usersIds: string[]) {
+    const existingTeam = this.findTeam(teamId)
+
+    if (!existingTeam) {
+      throw new Error('Team not found')
+    }
+
+    await prisma.$transaction(
+      usersIds.map(user_id =>
+        prisma.teamMember.create({
+          data: {
+            user_id,
+            team_id: teamId
+          }
+        })
+      )
+    )
+  }
+
+  static async removeUser(teamId: string, usersIds: string[]) {
+    const existingTeam = await this.findTeam(teamId)
+
+    if (!existingTeam) {
+      throw new Error('Team not found')
+    }
+
+    await prisma.$transaction(
+      usersIds.map(user_id =>
+        prisma.teamMember.delete({
+          where: {
+            user_id_team_id: {
+              user_id,
+              team_id: teamId
+            }
+          }
+        })
+      )
+    )
   }
 }

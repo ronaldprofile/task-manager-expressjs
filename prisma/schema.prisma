@@ -28,7 +28,7 @@ model User {
 }
 
 model TeamMember {
-  id String @id @default(uuid())
+  id String @default(uuid())
 
   team    Team   @relation(fields: [team_id], references: [id])
   team_id String
@@ -38,6 +38,7 @@ model TeamMember {
 
   created_at DateTime @default(now())
 
+  @@id([user_id, team_id])
   @@map("teams_members")
 }
 
