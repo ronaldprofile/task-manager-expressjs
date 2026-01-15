@@ -9,8 +9,8 @@ const port = process.env.PORT || 3000
 
 app.use(express.json())
 
-app.use('/auth', authRoutes)
-app.use('/teams', teamsRoutes)
+app.use(authRoutes)
+app.use(teamsRoutes)
 app.use(tasksRoutes)
 
 app.listen(port, () => {

@@ -7,23 +7,41 @@ import { removeUserTeamController } from './controllers/remove-user.controller.j
 import { authorize } from '../middlewares/authorize.middleware.js'
 import { authenticate } from '../middlewares/authenticate.middleware.js'
 import { readTeamsController } from './controllers/read.teams.controller.js'
+import { readTeamMembersController } from './controllers/read.team.members.controller.js'
 
 const router = Router()
 
-router.get('/', authenticate, authorize(['ADMIN']), readTeamsController)
-router.post('/', authenticate, authorize(['ADMIN']), registerTeamController)
-
-router.put('/:teamId', authenticate, authorize(['ADMIN']), updateTeamController)
+router.get('/teams', authenticate, authorize(['ADMIN']), readTeamsController)
+router.get(
+  '/teams/:teamId/members',
+  authenticate,
+  authorize(['ADMIN']),
+  readTeamMembersController
+)
 
 router.post(
-  '/:teamId/member/add',
+  '/teams',
+  authenticate,
+  authorize(['ADMIN']),
+  registerTeamController
+)
+
+router.put(
+  '/teams/:teamId',
+  authenticate,
+  authorize(['ADMIN']),
+  updateTeamController
+)
+
+router.post(
+  '/teams/:teamId/member/add',
   authenticate,
   authorize(['ADMIN']),
   addUserTeamController
 )
 
 router.delete(
-  '/:teamId/member/remove',
+  '/teams/:teamId/member/remove',
   authenticate,
   authorize(['ADMIN']),
   removeUserTeamController

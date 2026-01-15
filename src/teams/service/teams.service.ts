@@ -6,14 +6,54 @@ import type {
 
 export class TeamService {
   static async readTeams() {
-    const teams = await prisma.team.findMany()
+    const teams = await prisma.team.findMany({
+      include: {
+        members: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
+        }
+      }
+    })
     return teams
+  }
+
+  static async readTeamMembers(teamId: string) {
+    const existingTeam = await this.findTeam(teamId)
+
+    if (!existingTeam) {
+      throw new Error('Team not found')
+    }
+
+    const teamWithMembers = existingTeam.members.map(({ user }) => user)
+
+    return teamWithMembers
   }
 
   static async findTeam(teamId: string) {
     const team = await prisma.team.findUnique({
-      where: { id: teamId }
+      where: { id: teamId },
+      include: {
+        members: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true
+              }
+            }
+          }
+        }
+      }
     })
+
     return team
   }
 
@@ -31,7 +71,7 @@ export class TeamService {
   }
 
   static async update(teamId: string, data: UpdateTeamInput) {
-    const existingTeam = this.findTeam(teamId)
+    const existingTeam = await this.findTeam(teamId)
 
     if (!existingTeam) {
       throw new Error('Team not found')
@@ -53,7 +93,7 @@ export class TeamService {
   }
 
   static async addUserToTeam(teamId: string, usersIds: string[]) {
-    const existingTeam = this.findTeam(teamId)
+    const existingTeam = await this.findTeam(teamId)
 
     if (!existingTeam) {
       throw new Error('Team not found')

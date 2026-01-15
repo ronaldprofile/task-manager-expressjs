@@ -6,18 +6,37 @@ import { updateTaskController } from './controllers/update.task.controller.js'
 
 import { authorize } from '../middlewares/authorize.middleware.js'
 import { authenticate } from '../middlewares/authenticate.middleware.js'
+import { readTeamTaskController } from './controllers/read.team.task.controller.js'
 
 const router = Router()
 
 router.get('/tasks', authenticate, authorize(['ADMIN']), readTaskController)
+router.get(
+  '/tasks/:teamId',
+  authenticate,
+  authorize(['ADMIN', 'MEMBER']),
+  readTeamTaskController
+)
 
-router.post('/tasks/:teamId/:assignedTo', registerTaskController)
+router.post(
+  '/tasks/:teamId/:assignedTo',
+  authenticate,
+  authorize(['ADMIN']),
+  registerTaskController
+)
+
 router.put(
   '/tasks/:taskId',
   authenticate,
   authorize(['ADMIN', 'MEMBER']),
   updateTaskController
 )
-router.delete('/tasks/:taskId', removeTaskController)
+
+router.delete(
+  '/tasks/:taskId',
+  authenticate,
+  authorize(['ADMIN']),
+  removeTaskController
+)
 
 export default router
