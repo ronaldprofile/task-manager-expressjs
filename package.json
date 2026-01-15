@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "npx tsx watch .",
+    "build": "tsc",
+    "start": "node ./dist/src/server.js",
     "db:migrate": "npx prisma migrate dev",
     "db:generate": "npx prisma generate",
     "db:studio": "npx prisma studio"

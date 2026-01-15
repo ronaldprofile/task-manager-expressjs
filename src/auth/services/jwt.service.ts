@@ -4,7 +4,9 @@ const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h'
 
 if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET não está definido nas variáveis de ambiente')
+  throw new Error(
+    'Environment variable JWT_SECRET is required but was not found.'
+  )
 }
 
 export interface JWTPayload {
@@ -15,8 +17,8 @@ export interface JWTPayload {
 
 export class JWTService {
   static generateToken(payload: JWTPayload): string {
-    return jwt.sign(payload, JWT_SECRET!, {
-      expiresIn: JWT_EXPIRES_IN
+    return jwt.sign(payload, JWT_SECRET! as any, {
+      expiresIn: JWT_EXPIRES_IN as any
     })
   }
 
