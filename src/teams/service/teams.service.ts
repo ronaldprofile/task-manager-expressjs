@@ -1,3 +1,4 @@
+import { BadRequestError } from '../../errors/bad-request-error.js'
 import { prisma } from '../../lib/prisma.js'
 import type {
   RegisterTeamInput,
@@ -27,7 +28,7 @@ export class TeamService {
     const existingTeam = await this.findTeam(teamId)
 
     if (!existingTeam) {
-      throw new Error('Team not found')
+      throw new BadRequestError('Team not found')
     }
 
     const teamWithMembers = existingTeam.members.map(({ user }) => user)
@@ -74,7 +75,7 @@ export class TeamService {
     const existingTeam = await this.findTeam(teamId)
 
     if (!existingTeam) {
-      throw new Error('Team not found')
+      throw new BadRequestError('Team not found')
     }
 
     const { name, description } = data
@@ -96,7 +97,7 @@ export class TeamService {
     const existingTeam = await this.findTeam(teamId)
 
     if (!existingTeam) {
-      throw new Error('Team not found')
+      throw new BadRequestError('Team not found')
     }
 
     await prisma.$transaction(
@@ -115,7 +116,21 @@ export class TeamService {
     const existingTeam = await this.findTeam(teamId)
 
     if (!existingTeam) {
-      throw new Error('Team not found')
+      throw new BadRequestError('Team not found')
+    }
+
+    const users = await prisma.user.findMany({
+      where: { id: { in: usersIds } },
+      select: { id: true }
+    })
+
+    const foundUserIds = users.map(u => u.id)
+    const missingUserIds = usersIds.filter(id => !foundUserIds.includes(id))
+
+    if (missingUserIds.length > 0) {
+      throw new BadRequestError(
+        `Failed to remove user(s): ${missingUserIds.join(', ')}`
+      )
     }
 
     await prisma.$transaction(

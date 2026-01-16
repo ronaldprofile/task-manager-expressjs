@@ -1,4 +1,6 @@
 import type { TaskFindManyArgs } from '../../../generated/prisma/models.js'
+import { BadRequestError } from '../../errors/bad-request-error.js'
+import { UnauthorizedError } from '../../errors/unauthorized-error.js'
 import { prisma } from '../../lib/prisma.js'
 import type {
   RegisterTaskInput,
@@ -52,11 +54,13 @@ export class TasksService {
   }) {
     const task = await this.findTask(taskId)
 
-    if (!task) throw new Error('Task not found')
+    if (!task) throw new BadRequestError('Task not found')
 
     if (userRole === 'MEMBER') {
       if (task.assigned_to !== userId) {
-        throw new Error('You do not have permission to update this task')
+        throw new UnauthorizedError(
+          'You do not have permission to update this task'
+        )
       }
     }
 
@@ -150,7 +154,9 @@ export class TasksService {
     })
 
     if (tasks.length === 0 && isMember) {
-      throw new Error('You do not have permission to read this tasks')
+      throw new UnauthorizedError(
+        'You do not have permission to read this tasks'
+      )
     }
 
     return tasks
@@ -159,7 +165,7 @@ export class TasksService {
   static async removeTask(taskId: string) {
     const task = await this.findTask(taskId)
 
-    if (!task) throw new Error('Task not found')
+    if (!task) throw new BadRequestError('Task not found')
 
     await prisma.task.delete({ where: { id: taskId } })
   }

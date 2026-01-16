@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import { TokenError } from '../../errors/token-error.js'
 
 const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h'
@@ -35,13 +36,7 @@ export class JWTService {
         role: decoded.role
       }
     } catch (error) {
-      if (error instanceof jwt.TokenExpiredError) {
-        throw new Error('Token expirado')
-      }
-      if (error instanceof jwt.JsonWebTokenError) {
-        throw new Error('Token inválido')
-      }
-      throw new Error('Erro ao verificar token')
+      throw TokenError.fromJWTError(error)
     }
   }
 }

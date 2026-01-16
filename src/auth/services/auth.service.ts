@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import { RegisterInput } from '../validators/register.validator.js'
 import { LoginInput } from '../validators/login.validator.js'
 import { prisma } from '../../lib/prisma.js'
+import { BadRequestError } from '../../errors/bad-request-error.js'
 
 const SALT_ROUNDS = 6
 
@@ -13,7 +14,7 @@ export class AuthService {
     })
 
     if (existingUser) {
-      throw new Error('Email já cadastrado')
+      throw new BadRequestError('Email já cadastrado')
     }
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
@@ -37,13 +38,13 @@ export class AuthService {
     })
 
     if (!user) {
-      throw new Error('Credenciais inválidas')
+      throw new BadRequestError('Credenciais inválidas')
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password)
 
     if (!isPasswordValid) {
-      throw new Error('Credenciais inválidas')
+      throw new BadRequestError('Credenciais inválidas')
     }
 
     const { password: _, ...userWithoutPassword } = user

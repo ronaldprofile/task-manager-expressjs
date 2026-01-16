@@ -10,13 +10,13 @@ export const authenticate = async (
     const authHeader = req.headers.authorization
 
     if (!authHeader) {
-      return res.status(401).json({ error: 'Token não fornecido' })
+      return res.status(401).json({ message: 'Token not provided' })
     }
 
     const parts = authHeader.split(' ')
 
     if (parts.length !== 2 || parts[0] !== 'Bearer') {
-      return res.status(401).json({ error: 'Formato de token inválido' })
+      return res.status(401).json({ message: 'Invalid token format' })
     }
 
     const token = parts[1]
@@ -33,10 +33,10 @@ export const authenticate = async (
       next()
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Token inválido ou expirado'
-      return res.status(401).json({ error: message })
+        error instanceof Error ? error.message : 'Token invalid or expired'
+      return res.status(401).json({ message })
     }
   } catch (error) {
-    return res.status(500).json({ error: 'Server internal error' })
+    return res.status(500).json({ message: 'Server internal error' })
   }
 }

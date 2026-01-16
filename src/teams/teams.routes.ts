@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { registerTeamController } from './controllers/register.controller.js'
-import { updateTeamController } from './controllers/update.controller.js'
-import { addUserTeamController } from './controllers/add-user.controller.js'
-import { removeUserTeamController } from './controllers/remove-user.controller.js'
+import { registerTeamController } from './controllers/register.team.controller.js'
+import { updateTeamController } from './controllers/update.team.controller.js'
+import { addUserTeamController } from './controllers/add.team.user.controller.js'
+import { removeUserTeamController } from './controllers/remove.team.user.controller.js'
 
 import { authorize } from '../middlewares/authorize.middleware.js'
 import { authenticate } from '../middlewares/authenticate.middleware.js'

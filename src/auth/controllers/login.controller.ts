@@ -26,10 +26,8 @@ export const loginController = async (req: Request, res: Response) => {
     }
 
     if (error instanceof Error) {
-      if (error.message === 'Credenciais inválidas') {
-        return res.status(401).json({
-          message: 'Credenciais inválidas'
-        })
+      if (error.message) {
+        return res.status(401).json({ message: error.message })
       }
     }
 
