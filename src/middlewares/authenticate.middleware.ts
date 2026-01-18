@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { JWTService } from '../auth/services/jwt.service.js'
+import { JWTService } from '../services/jwt.service.js'
 
 export const authenticate = async (
   req: Request,
@@ -22,7 +22,8 @@ export const authenticate = async (
     const token = parts[1]
 
     try {
-      const payload = JWTService.verifyToken(token)
+      const jwtService = new JWTService()
+      const payload = jwtService.verifyToken(token)
 
       req.user = {
         id: payload.userId,

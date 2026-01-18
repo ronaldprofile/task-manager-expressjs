@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import express from 'express'
-import authRoutes from './auth/auth.routes.js'
+import authRoutes from './routes/auth.routes.js'
 import teamsRoutes from './routes/teams.routes.js'
 import tasksRoutes from './routes/tasks.routes.js'
 import { errorHandler } from './middlewares/error.handler.middleware.js'

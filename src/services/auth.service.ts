@@ -1,17 +1,16 @@
 import bcrypt from 'bcrypt'
-import { RegisterInput } from '../validators/register.validator.js'
-import { LoginInput } from '../validators/login.validator.js'
-import { prisma } from '../../lib/prisma.js'
-import { BadRequestError } from '../../errors/bad-request-error.js'
+import { BadRequestError } from '../errors/bad-request-error.js'
+import type { AuthRepository } from '../repositories/auth.repository.js'
+import type { SignUpInput, SignInInput } from '../validators/auth.validator.js'
 
 const SALT_ROUNDS = 6
 
 export class AuthService {
-  static async register(data: RegisterInput) {
+  constructor(private authRepository: AuthRepository) { }
+
+  async register(data: SignUpInput) {
     const { email, name, password, role } = data
-    const existingUser = await prisma.user.findUnique({
-      where: { email }
-    })
+    const existingUser = await this.authRepository.findByEmail(email)
 
     if (existingUser) {
       throw new BadRequestError('Email já cadastrado')
@@ -19,23 +18,20 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
 
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role
-      }
+    const user = await this.authRepository.register({
+      name,
+      email,
+      password: hashedPassword,
+      role
     })
 
     return user
   }
 
-  static async login(data: LoginInput) {
+  async login(data: SignInInput) {
     const { email, password } = data
-    const user = await prisma.user.findUnique({
-      where: { email }
-    })
+
+    const user = await this.authRepository.findByEmail(email)
 
     if (!user) {
       throw new BadRequestError('Credenciais inválidas')

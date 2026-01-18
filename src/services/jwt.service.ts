@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { TokenError } from '../../errors/token-error.js'
+import { TokenError } from '../errors/token-error.js'
 
 const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h'
@@ -17,13 +17,13 @@ export interface JWTPayload {
 }
 
 export class JWTService {
-  static generateToken(payload: JWTPayload): string {
+  generateToken(payload: JWTPayload): string {
     return jwt.sign(payload, JWT_SECRET! as any, {
       expiresIn: JWT_EXPIRES_IN as any
     })
   }
 
-  static verifyToken(token: string): JWTPayload {
+  verifyToken(token: string): JWTPayload {
     try {
       const decoded = jwt.verify(token, JWT_SECRET!) as JWTPayload & {
         iat: number

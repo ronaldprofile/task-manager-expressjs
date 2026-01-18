@@ -1,12 +1,18 @@
 import { Request, Response } from 'express'
 import type { TeamService } from '../services/teams.service.js'
+import {
+  registerTeamSchema,
+  updateTeamSchema,
+  type RegisterTeamInput,
+  type UpdateTeamInput
+} from '../validators/teams.validator.js'
 
 type TeamParams = {
   teamId: string
 }
 
 export class TeamsController {
-  constructor(private teamService: TeamService) {}
+  constructor(private teamService: TeamService) { }
 
   readTeams = async (req: Request, res: Response) => {
     const teams = await this.teamService.readTeams()
@@ -18,19 +24,32 @@ export class TeamsController {
     return res.status(200).json({ members })
   }
 
-  register = async (req: Request, res: Response) => {
-    const team = await this.teamService.register(req.body)
+  register = async (req: Request<any, any, RegisterTeamInput>, res: Response) => {
+    const { name, description } = registerTeamSchema.parse(req.body)
+
+    const team = await this.teamService.register({
+      name,
+      description
+    })
     return res.status(201).json({ team })
   }
 
-  update = async (req: Request<TeamParams>, res: Response) => {
-    const team = await this.teamService.update(req.params.teamId, req.body)
+  update = async (req: Request<TeamParams, any, UpdateTeamInput>, res: Response) => {
+    const { teamId } = req.params
+    const { name, description } = updateTeamSchema.parse(req.body)
+
+    const team = await this.teamService.update(teamId, {
+      name,
+      description
+    })
     return res.status(200).json({ team })
   }
 
-  addUserToTeam = async (req: Request<TeamParams>, res: Response) => {
+  addUserToTeam = async (req: Request<TeamParams, any, { usersIds: string[] }>, res: Response) => {
+    const { teamId } = req.params
     const { usersIds } = req.body
-    await this.teamService.addUserToTeam(req.params.teamId, usersIds)
+
+    await this.teamService.addUserToTeam(teamId, usersIds)
     return res.status(200).json({ message: 'User added' })
   }
 

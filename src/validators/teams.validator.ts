@@ -13,4 +13,6 @@ export const registerTeamSchema = z.object({
 
 export type RegisterTeamInput = z.infer<typeof registerTeamSchema>
 
+
+export const updateTeamSchema = registerTeamSchema
 export type UpdateTeamInput = Partial<RegisterTeamInput>

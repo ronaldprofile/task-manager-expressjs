@@ -14,4 +14,8 @@ export const registerTaskSchema = z.object({
 })
 
 export type RegisterTaskInput = z.infer<typeof registerTaskSchema>
+
+
+export const updateTaskSchema = registerTaskSchema
+
 export type UpdateTaskInput = Partial<RegisterTaskInput>

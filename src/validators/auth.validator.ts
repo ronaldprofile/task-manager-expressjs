@@ -1,6 +1,15 @@
 import { z } from 'zod'
 
-export const registerSchema = z.object({
+export const signInSchema = z.object({
+  email: z.email('Email inválido'),
+  password: z.string().min(1, 'Senha é obrigatória')
+})
+
+export type SignInInput = z.infer<typeof signInSchema>
+
+
+
+export const signUpSchema = z.object({
   name: z
     .string()
     .min(2, 'Nome deve ter no mínimo 2 caracteres')
@@ -12,4 +21,4 @@ export const registerSchema = z.object({
   role: z.enum(['ADMIN', 'MEMBER']).default('MEMBER')
 })
 
-export type RegisterInput = z.infer<typeof registerSchema>
+export type SignUpInput = z.infer<typeof signUpSchema>
