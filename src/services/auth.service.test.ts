@@ -1,6 +1,6 @@
 import { AuthRepository } from "../repositories/auth.repository.js"
 import { prismaMock } from "../test/setup.js"
-import { makeUser, makeRegisterUserData } from "../test/factories.js"
+import { makeUser, makeRegisterUserData } from "../test/index.js"
 import { AuthService } from "./auth.service.js"
 
 const HASHED_PASSWORD_PASS = "hashed-password"

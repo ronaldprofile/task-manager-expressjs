@@ -1,1 +1,1 @@
-export * from "./factories.js"
+export * from "./factories/index.js"

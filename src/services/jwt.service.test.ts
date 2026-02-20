@@ -1,6 +1,6 @@
 import { TokenExpiredError } from "jsonwebtoken"
 import { JWTService } from "./jwt.service.js"
-import { makeJWTPayload } from "../test/factories.js"
+import { makeJWTPayload } from "../test/index.js"
 import { TokenError } from "../errors/index.js"
 
 const { mockSign, mockVerify } = vi.hoisted(() => ({

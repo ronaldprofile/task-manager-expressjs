@@ -1,6 +1,6 @@
-import type { JWTPayload } from "../services/jwt.service.js"
+import type { JWTPayload } from "../../services/jwt.service.js"
 
-const makeRegisterUserData = (overrides = {}) => ({
+export const makeRegisterUserData = (overrides = {}) => ({
   email: "test@example.com",
   name: "Test User",
   password: "password123",
@@ -8,7 +8,7 @@ const makeRegisterUserData = (overrides = {}) => ({
   ...overrides
 })
 
-const makeUser = (overrides = {}) => ({
+export const makeUser = (overrides = {}) => ({
   id: "test-user-id",
   email: "test@example.com",
   name: "Test User",
@@ -19,11 +19,9 @@ const makeUser = (overrides = {}) => ({
   ...overrides
 })
 
-const makeJWTPayload = (overrides = {}): JWTPayload => ({
+export const makeJWTPayload = (overrides = {}): JWTPayload => ({
   userId: "test-user-id",
   email: "test@example.com",
   role: "MEMBER",
   ...overrides
 })
-
-export { makeRegisterUserData, makeUser, makeJWTPayload }

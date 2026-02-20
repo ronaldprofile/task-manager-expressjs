@@ -1,14 +1,14 @@
-import { prisma } from '../lib/prisma.js'
+import { prisma } from "../lib/prisma.js"
 import type {
   RegisterTeamInput,
   UpdateTeamInput
-} from '../validators/teams.validator.js'
+} from "../validators/teams.validator.js"
 
 export class TeamRepository {
   async findAll() {
     return await prisma.team.findMany({
       orderBy: {
-        created_at: 'desc'
+        created_at: "desc"
       },
       include: {
         members: {
