@@ -1,7 +1,15 @@
 import type {
   TeamModel,
-  TeamMemberModel
+  TeamMemberModel,
+  UserModel
 } from "../../../generated/prisma/models.js"
+import type { RegisterTeamInput } from "../../validators/teams.validator.js"
+
+export const makeRegisterTeam = (overrides?: Partial<RegisterTeamInput>) => ({
+  name: "Test Team",
+  description: "A team for testing purposes",
+  ...overrides
+})
 
 export const makeTeam = (overrides?: Partial<TeamModel>): TeamModel => ({
   id: "team-id",
@@ -22,16 +30,37 @@ export const makeTeamMember = (
   ...overrides
 })
 
-export const makeTeamWithMembers = (overrides?: Partial<TeamModel>) => ({
-  ...makeTeam(overrides),
-  members: [
-    makeTeamMember({
-      team_id: overrides?.id || "team-id",
-      user_id: "user-id-1"
-    }),
-    makeTeamMember({
-      team_id: overrides?.id || "team-id",
-      user_id: "user-id-2"
-    })
-  ]
-})
+type TeamWithMembers = TeamModel & {
+  members: {
+    user: TeamMemberModel & {
+      role: UserModel["role"]
+    }
+  }[]
+}
+
+export const makeTeamWithMembers = (
+  overrides?: Partial<TeamWithMembers>,
+  members?: TeamWithMembers["members"]
+) => {
+  return {
+    ...makeTeam(overrides),
+    members: members || [
+      {
+        user: {
+          ...makeTeamMember({
+            team_id: overrides?.id || "team-id",
+            user_id: "user-id-1"
+          })
+        }
+      },
+      {
+        user: {
+          ...makeTeamMember({
+            team_id: overrides?.id || "team-id",
+            user_id: "user-id-2"
+          })
+        }
+      }
+    ]
+  }
+}

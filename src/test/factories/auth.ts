@@ -1,3 +1,4 @@
+import type { UserModel } from "../../../generated/prisma/models.js"
 import type { JWTPayload } from "../../services/jwt.service.js"
 
 export const makeRegisterUserData = (overrides = {}) => ({
@@ -8,7 +9,7 @@ export const makeRegisterUserData = (overrides = {}) => ({
   ...overrides
 })
 
-export const makeUser = (overrides = {}) => ({
+export const makeUser = (overrides?: Partial<UserModel>): UserModel => ({
   id: "test-user-id",
   email: "test@example.com",
   name: "Test User",
@@ -19,7 +20,9 @@ export const makeUser = (overrides = {}) => ({
   ...overrides
 })
 
-export const makeJWTPayload = (overrides = {}): JWTPayload => ({
+export const makeJWTPayload = (
+  overrides?: Partial<JWTPayload>
+): JWTPayload => ({
   userId: "test-user-id",
   email: "test@example.com",
   role: "MEMBER",
