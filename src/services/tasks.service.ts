@@ -1,11 +1,11 @@
-import { BadRequestError } from '../errors/bad-request-error.js'
-import { UnauthorizedError } from '../errors/unauthorized-error.js'
-import type { TaskRepository } from '../repositories/task.repository.js'
-import type { TeamRepository } from '../repositories/team.repository.js'
+import { BadRequestError } from "../errors/bad-request-error.js"
+import { UnauthorizedError } from "../errors/unauthorized-error.js"
+import type { TaskRepository } from "../repositories/task.repository.js"
+import type { TeamRepository } from "../repositories/team.repository.js"
 import type {
   RegisterTaskInput,
   UpdateTaskInput
-} from '../validators/tasks.validator.js'
+} from "../validators/tasks.validator.js"
 
 export class TasksService {
   constructor(
@@ -20,7 +20,7 @@ export class TasksService {
 
   async findTask(taskId: string) {
     const task = await this.taskRepository.findById(taskId)
-    if (!task) throw new BadRequestError('Task not found')
+    if (!task) throw new BadRequestError("Task not found")
 
     return task
   }
@@ -59,14 +59,14 @@ export class TasksService {
     taskId: string
     data: UpdateTaskInput
     userId: string
-    userRole: 'ADMIN' | 'MEMBER'
+    userRole: "ADMIN" | "MEMBER"
   }) {
     const task = await this.findTask(taskId)
 
-    if (userRole === 'MEMBER') {
+    if (userRole === "MEMBER") {
       if (task.assigned_to !== userId) {
         throw new UnauthorizedError(
-          'You do not have permission to update this task'
+          "You do not have permission to update this task"
         )
       }
     }
@@ -83,17 +83,17 @@ export class TasksService {
   }: {
     teamId: string
     userId: string
-    userRole: 'ADMIN' | 'MEMBER'
+    userRole: "ADMIN" | "MEMBER"
   }) {
     const teamExists = await this.teamRepository.findById(teamId)
 
-    if (!teamExists) throw new BadRequestError('Team not found')
+    if (!teamExists) throw new BadRequestError("Team not found")
 
-    if (userRole === 'MEMBER') {
+    if (userRole === "MEMBER") {
       const isMember = await this.teamRepository.isMemberOfTeam(teamId, userId)
 
       if (!isMember) {
-        throw new UnauthorizedError('You are not a member of this team')
+        throw new UnauthorizedError("You are not a member of this team")
       }
 
       return await this.taskRepository.readTasksFromTeam({

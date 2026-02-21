@@ -1,9 +1,9 @@
-import { BadRequestError } from '../errors/bad-request-error.js'
-import { TeamRepository } from '../repositories/team.repository.js'
+import { BadRequestError } from "../errors/bad-request-error.js"
+import { TeamRepository } from "../repositories/team.repository.js"
 import type {
   RegisterTeamInput,
   UpdateTeamInput
-} from '../validators/teams.validator.js'
+} from "../validators/teams.validator.js"
 
 export class TeamService {
   constructor(private teamRepository: TeamRepository) {}
@@ -22,7 +22,7 @@ export class TeamService {
     const team = await this.teamRepository.findById(teamId)
 
     if (!team) {
-      throw new BadRequestError('Team not found')
+      throw new BadRequestError("Team not found")
     }
 
     return team
@@ -43,7 +43,8 @@ export class TeamService {
   async addUserToTeam(teamId: string, usersIds: string[]) {
     await this.findTeam(teamId)
 
-    await this.teamRepository.addMembers(teamId, usersIds)
+    const members = await this.teamRepository.addMembers(teamId, usersIds)
+    return members
   }
 
   async removeUser(teamId: string, usersIds: string[]) {
@@ -55,10 +56,14 @@ export class TeamService {
 
     if (missingUserIds.length > 0) {
       throw new BadRequestError(
-        `Failed to remove user(s): ${missingUserIds.join(', ')}`
+        `Failed to remove user(s): ${missingUserIds.join(", ")}`
       )
     }
 
-    await this.teamRepository.removeMembers(teamId, usersIds)
+    const removedMembers = await this.teamRepository.removeMembers(
+      teamId,
+      usersIds
+    )
+    return removedMembers
   }
 }

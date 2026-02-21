@@ -3,20 +3,13 @@
   "_version": "22.0.0",
   "compilerOptions": {
     "outDir": "./dist",
-    "lib": [
-      "es2024",
-      "ESNext.Array",
-      "ESNext.Collection",
-      "ESNext.Iterator"
-    ],
-    "types": [
-      "node"
-    ],
+    "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator"],
+    "types": ["node", "vitest/globals"],
     "module": "nodenext",
     "target": "ESNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "nodenext"
   }
 }
