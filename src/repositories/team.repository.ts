@@ -1,14 +1,14 @@
-import { prisma } from '../lib/prisma.js'
+import { prisma } from "../lib/prisma.js"
 import type {
   RegisterTeamInput,
   UpdateTeamInput
-} from '../validators/teams.validator.js'
+} from "../validators/teams.validator.js"
 
 export class TeamRepository {
   async findAll() {
     return await prisma.team.findMany({
       orderBy: {
-        created_at: 'desc'
+        created_at: "desc"
       },
       include: {
         members: {
@@ -71,7 +71,7 @@ export class TeamRepository {
   }
 
   async addMembers(teamId: string, userIds: string[]) {
-    await prisma.$transaction(
+    return await prisma.$transaction(
       userIds.map(user_id =>
         prisma.teamMember.create({
           data: {
@@ -84,7 +84,7 @@ export class TeamRepository {
   }
 
   async removeMembers(teamId: string, userIds: string[]) {
-    await prisma.$transaction(
+    return await prisma.$transaction(
       userIds.map(user_id =>
         prisma.teamMember.delete({
           where: {

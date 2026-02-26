@@ -1,19 +1,19 @@
-import jwt from 'jsonwebtoken'
-import { TokenError } from '../errors/token-error.js'
+import jwt from "jsonwebtoken"
+import { TokenError } from "../errors/token-error.js"
 
 const JWT_SECRET = process.env.JWT_SECRET
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h'
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "24h"
 
 if (!JWT_SECRET) {
   throw new Error(
-    'Environment variable JWT_SECRET is required but was not found.'
+    "Environment variable JWT_SECRET is required but was not found."
   )
 }
 
 export interface JWTPayload {
   userId: string
   email: string
-  role: 'ADMIN' | 'MEMBER'
+  role: "ADMIN" | "MEMBER"
 }
 
 export class JWTService {
