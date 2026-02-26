@@ -12,6 +12,7 @@
     "db:studio": "npx prisma studio",
     "test": "vitest run",
     "test:watch": "vitest watch",
+    "test:integration": "bash ./scripts/run-integration.sh",
     "test:coverage": "vitest --coverage"
   },
   "keywords": [],
