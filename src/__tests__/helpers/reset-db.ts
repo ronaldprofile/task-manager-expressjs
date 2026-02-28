@@ -1,10 +1,10 @@
-import { prismaMock } from "../../test/setup.js"
+import { prisma } from "../../lib/prisma.js"
 
 export async function resetDB() {
-  await prismaMock.$transaction([
-    prismaMock.user.deleteMany(),
-    prismaMock.task.deleteMany(),
-    prismaMock.team.deleteMany(),
-    prismaMock.teamMember.deleteMany()
+  await prisma.$transaction([
+    prisma.user.deleteMany(),
+    prisma.task.deleteMany(),
+    prisma.team.deleteMany(),
+    prisma.teamMember.deleteMany()
   ])
 }

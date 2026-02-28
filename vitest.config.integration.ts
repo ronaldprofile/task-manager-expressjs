@@ -1,4 +1,3 @@
-// vitest.config.integration.ts
 import { defineConfig } from "vitest/config"
 
 export default defineConfig({
@@ -11,6 +10,8 @@ export default defineConfig({
       JWT_SECRET: "test-secret",
       JWT_EXPIRES_IN: "24h",
       DATABASE_URL: "postgresql://prisma:prisma@localhost:5433/tests"
-    }
+    },
+    maxWorkers: 1,
+    isolate: false
   }
 })
