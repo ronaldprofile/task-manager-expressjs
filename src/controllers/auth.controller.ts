@@ -45,6 +45,6 @@ export class AuthController {
       role: user.role
     })
 
-    return res.status(201).json({ user, token })
+    return res.status(200).json({ user, token })
   }
 }
