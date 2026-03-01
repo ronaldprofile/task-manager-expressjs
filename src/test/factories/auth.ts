@@ -1,7 +1,8 @@
 import type { UserModel } from "../../../generated/prisma/models.js"
 import type { JWTPayload } from "../../services/jwt.service.js"
+import type { SignUpInput } from "../../validators/auth.validator.js"
 
-export const makeRegisterUserData = (overrides = {}) => ({
+export const makeRegisterUserData = (overrides?: Partial<SignUpInput>) => ({
   email: "test@example.com",
   name: "Test User",
   password: "password123",
