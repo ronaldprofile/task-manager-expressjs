@@ -6,6 +6,12 @@ export default defineConfig({
     environment: "node",
     setupFiles: "./src/test/setup.ts",
     include: ["src/**/*.test.ts"],
+    exclude: ["**/*.integration.test.ts", "node_modules"],
+    reporters: ["default", "html"],
+    coverage: {
+      enabled: true,
+      reporter: "html"
+    },
     env: {
       JWT_SECRET: "test-secret",
       JWT_EXPIRES_IN: "24h"
