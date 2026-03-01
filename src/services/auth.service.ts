@@ -3,7 +3,7 @@ import { BadRequestError } from "../errors/bad-request-error.js"
 import type { AuthRepository } from "../repositories/auth.repository.js"
 import type { SignUpInput, SignInInput } from "../validators/auth.validator.js"
 
-const SALT_ROUNDS = 6
+export const SALT_ROUNDS = 6
 
 export class AuthService {
   constructor(private authRepository: AuthRepository) {}
