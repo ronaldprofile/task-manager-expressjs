@@ -1,8 +1,4 @@
-import {
-  TokenExpiredError,
-  JsonWebTokenError,
-  NotBeforeError
-} from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 
 export class TokenError extends Error {
   constructor(message: string) {
@@ -13,15 +9,15 @@ export class TokenError extends Error {
   }
 
   static fromJWTError(error: unknown): TokenError {
-    if (error instanceof TokenExpiredError) {
+    if (error instanceof jwt.TokenExpiredError) {
       return new TokenError("Token expired")
     }
 
-    if (error instanceof JsonWebTokenError) {
+    if (error instanceof jwt.JsonWebTokenError) {
       return new TokenError("Token invalid")
     }
 
-    if (error instanceof NotBeforeError) {
+    if (error instanceof jwt.NotBeforeError) {
       return new TokenError("Token is not yet valid")
     }
 
