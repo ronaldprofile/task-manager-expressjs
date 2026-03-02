@@ -10,14 +10,17 @@ const { mockSign, mockVerify } = vi.hoisted(() => ({
 
 vi.mock("jsonwebtoken", async importOriginal => {
   const actual = await importOriginal<typeof import("jsonwebtoken")>()
-
+  const { TokenExpiredError, JsonWebTokenError, NotBeforeError } = actual
   return {
     ...actual,
-    TokenExpiredError: actual.TokenExpiredError,
-    JsonWebTokenError: actual.JsonWebTokenError,
-    NotBeforeError: actual.NotBeforeError,
+    TokenExpiredError,
+    JsonWebTokenError,
+    NotBeforeError,
     default: {
       ...actual,
+      TokenExpiredError,
+      JsonWebTokenError,
+      NotBeforeError,
       sign: (...args: any[]) => mockSign(...args),
       verify: (...args: any[]) => mockVerify(...args)
     }
@@ -68,7 +71,7 @@ describe("JWT Service", () => {
     })
 
     it("should throw TokenError when token is expired", async () => {
-      mockVerify.mockImplementation(() => {
+      mockVerify.mockImplementation(function () {
         throw new TokenExpiredError("jwt expired", new Date())
       })
 
@@ -78,7 +81,7 @@ describe("JWT Service", () => {
     })
 
     it("should throw TokenError when token is invalid", () => {
-      mockVerify.mockImplementation(() => {
+      mockVerify.mockImplementation(function () {
         throw new Error("invalid signature")
       })
 

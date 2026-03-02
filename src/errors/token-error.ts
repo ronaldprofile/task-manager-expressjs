@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken"
+const { TokenExpiredError, JsonWebTokenError, NotBeforeError } = jwt
 
 export class TokenError extends Error {
   constructor(message: string) {
@@ -9,15 +10,15 @@ export class TokenError extends Error {
   }
 
   static fromJWTError(error: unknown): TokenError {
-    if (error instanceof jwt.TokenExpiredError) {
+    if (error instanceof TokenExpiredError) {
       return new TokenError("Token expired")
     }
 
-    if (error instanceof jwt.JsonWebTokenError) {
+    if (error instanceof JsonWebTokenError) {
       return new TokenError("Token invalid")
     }
 
-    if (error instanceof jwt.NotBeforeError) {
+    if (error instanceof NotBeforeError) {
       return new TokenError("Token is not yet valid")
     }
 
