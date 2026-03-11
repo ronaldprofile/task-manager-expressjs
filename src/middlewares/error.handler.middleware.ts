@@ -1,6 +1,7 @@
-import { Request, Response, NextFunction } from 'express'
-import { ZodError } from 'zod'
-import { formatZodError } from '../utils/format-zod-error.js'
+import { Request, Response, NextFunction } from "express"
+import { ZodError } from "zod"
+import { formatZodError } from "../utils/format-zod-error.js"
+import { UnauthorizedError } from "../errors/unauthorized-error.js"
 
 export function errorHandler(
   error: Error,
@@ -12,9 +13,13 @@ export function errorHandler(
     return res.status(400).json(formatZodError(error))
   }
 
+  if (error instanceof UnauthorizedError) {
+    return res.status(403).json({ message: error.message })
+  }
+
   if (error.message) {
     return res.status(400).json({ message: error.message })
   }
 
-  return res.status(500).json({ message: 'Internal server error' })
+  return res.status(500).json({ message: "Internal server error" })
 }
