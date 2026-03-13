@@ -17,7 +17,7 @@ export async function seedUser(
 }
 
 export async function seedTeam(overrides: Parameters<typeof makeTeam>[0] = {}) {
-  const { id, ...team } = makeTeam()
+  const { id, ...team } = makeTeam(overrides)
 
   return prisma.team.create({
     data: team
