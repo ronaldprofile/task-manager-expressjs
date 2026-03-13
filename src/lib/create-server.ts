@@ -11,6 +11,7 @@ import { TaskRepository } from "../repositories/task.repository.js"
 import { TeamRepository } from "../repositories/team.repository.js"
 import { TasksService } from "../services/tasks.service.js"
 import { TasksController } from "../controllers/task.controller.js"
+import teamsRouter from "../routes/teams.routes.js"
 
 const app = express()
 
@@ -59,6 +60,8 @@ app.delete(
   authorize(["ADMIN"]),
   taskController.remove
 )
+
+app.use(teamsRouter)
 
 app.use(errorHandler)
 
