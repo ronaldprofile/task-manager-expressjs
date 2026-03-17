@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import cookieParser from "cookie-parser"
 import { AuthRepository } from "../repositories/auth.repository.js"
 import { AuthService } from "../services/auth.service.js"
 import { JWTService } from "../services/jwt.service.js"
@@ -15,8 +16,9 @@ import teamsRouter from "../routes/teams.routes.js"
 
 const app = express()
 
+app.use(cors({ origin: "*", credentials: true }))
+app.use(cookieParser())
 app.use(express.json())
-app.use(cors({ origin: "*" }))
 
 const authRepository = new AuthRepository()
 const authService = new AuthService(authRepository)
@@ -31,6 +33,7 @@ const taskController = new TasksController(taskService)
 
 app.post("/auth/register", authController.signUp)
 app.post("/auth/login", authController.signIn)
+app.post("/auth/logout", authController.signOut)
 
 app.get("/tasks", authenticate, authorize(["ADMIN"]), taskController.readTasks)
 app.get(
