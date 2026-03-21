@@ -8,18 +8,24 @@ export const authenticate = async (
 ) => {
   try {
     const authHeader = req.headers.authorization
+    const cookieToken = req.cookies?.token
 
-    if (!authHeader) {
+    let token: string | undefined
+
+    if (authHeader) {
+      const parts = authHeader.split(' ')
+      if (parts.length === 2 && parts[0] === 'Bearer') {
+        token = parts[1]
+      }
+    }
+
+    if (!token && cookieToken) {
+      token = cookieToken
+    }
+
+    if (!token) {
       return res.status(401).json({ message: 'Token not provided' })
     }
-
-    const parts = authHeader.split(' ')
-
-    if (parts.length !== 2 || parts[0] !== 'Bearer') {
-      return res.status(401).json({ message: 'Invalid token format' })
-    }
-
-    const token = parts[1]
 
     try {
       const jwtService = new JWTService()

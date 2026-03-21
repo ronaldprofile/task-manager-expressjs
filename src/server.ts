@@ -1,6 +1,7 @@
 import "dotenv/config"
 import express from "express"
 import cors from "cors"
+import cookieParser from "cookie-parser"
 import authRoutes from "./routes/auth.routes.js"
 import teamsRoutes from "./routes/teams.routes.js"
 import tasksRoutes from "./routes/tasks.routes.js"
@@ -9,8 +10,8 @@ import { errorHandler } from "./middlewares/error.handler.middleware.js"
 const app = express()
 const port = process.env.PORT || 3000
 
-app.use(cors({ origin: "*" }))
-
+app.use(cors({ origin: "*", credentials: true }))
+app.use(cookieParser())
 app.use(express.json())
 
 app.use(authRoutes)

@@ -47,4 +47,8 @@ export class AuthService {
 
     return userWithoutPassword
   }
+
+  async findById(id: string) {
+    return this.authRepository.findById(id)
+  }
 }

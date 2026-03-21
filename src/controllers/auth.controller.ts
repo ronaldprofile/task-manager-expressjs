@@ -28,7 +28,14 @@ export class AuthController {
       role: user.role
     })
 
-    return res.status(201).json({ user: userWithoutPassword, token })
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    })
+
+    return res.status(201).json({ user: userWithoutPassword })
   }
 
   signIn = async (req: Request, res: Response) => {
@@ -45,6 +52,24 @@ export class AuthController {
       role: user.role
     })
 
-    return res.status(200).json({ user, token })
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    })
+
+    return res.status(200).json({ user })
+  }
+
+  me = async (req: Request, res: Response) => {
+    const user = await this.authService.findById(req.user!.id)
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' })
+    }
+
+    const { password: _, ...userWithoutPassword } = user
+    return res.status(200).json(userWithoutPassword)
   }
 }
