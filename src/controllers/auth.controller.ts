@@ -62,11 +62,16 @@ export class AuthController {
     return res.status(200).json({ user })
   }
 
+  signOut = async (req: Request, res: Response) => {
+    res.clearCookie("token")
+    return res.status(200).json()
+  }
+
   me = async (req: Request, res: Response) => {
     const user = await this.authService.findById(req.user!.id)
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' })
+      return res.status(404).json({ error: "User not found" })
     }
 
     const { password: _, ...userWithoutPassword } = user

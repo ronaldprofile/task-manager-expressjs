@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express'
-import { JWTService } from '../services/jwt.service.js'
+import { Request, Response, NextFunction } from "express"
+import { JWTService } from "../services/jwt.service.js"
 
 export const authenticate = async (
   req: Request,
@@ -13,8 +13,8 @@ export const authenticate = async (
     let token: string | undefined
 
     if (authHeader) {
-      const parts = authHeader.split(' ')
-      if (parts.length === 2 && parts[0] === 'Bearer') {
+      const parts = authHeader.split(" ")
+      if (parts.length === 2 && parts[0] === "Bearer") {
         token = parts[1]
       }
     }
@@ -24,7 +24,7 @@ export const authenticate = async (
     }
 
     if (!token) {
-      return res.status(401).json({ message: 'Token not provided' })
+      return res.status(401).json({ message: "Token not provided" })
     }
 
     try {
@@ -40,10 +40,10 @@ export const authenticate = async (
       next()
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Token invalid or expired'
+        error instanceof Error ? error.message : "Token invalid or expired"
       return res.status(401).json({ message })
     }
   } catch (error) {
-    return res.status(500).json({ message: 'Server internal error' })
+    return res.status(500).json({ message: "Server internal error" })
   }
 }
